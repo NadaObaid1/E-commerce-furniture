@@ -1,0 +1,105 @@
+.LoginContainer{
+    background-color: var(--subsecondary-color);
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    overflow-x: hidden;
+    padding-top: 20px;
+    padding-bottom: 20px;
+   
+}
+.LoginForm{
+    background-color: #fff;
+    padding-left: 100px; /* Add padding for all sides to create space */
+    padding-right: 80px; /* Add padding for all sides to create space */
+    max-width: 400px; /* Example max-width for centering */
+    border-radius: 10px; /* Optional: Add border-radius for rounded corners */
+}
+.LoginForm h2{
+    text-decoration: underline;
+    text-align: center;
+}
+.LoginForm p{
+    font-size: 12px;
+    text-align: center;
+    color: var(--primary-color);
+}
+.LoginImage{
+background-color: #fff;
+}
+.LoginImage .img{
+    margin-right: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-groupimage{
+    margin-bottom: 15px;
+  }
+  .form-group label, .form-groupimage label {
+     font-size: 15px;
+     font-weight: bold;
+     text-transform: capitalize;
+     font-family:'Times New Roman', Times, serif
+  }
+  
+  .form-group input {
+    padding-left: 10px; /* Adjusted to provide left padding */
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .ButtonSigUp {
+    background-color: var(--background-color);
+    color: var(--subsecondary-color);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+  }
+  
+  .ButtonSigUp:hover {
+    background-color: var(--primary-color);
+    color: var(--subsecondary-color);
+  }
+  .social-login p{
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  .social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    width: 100%;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+.social-button.google {
+    background-color:#222831;
+}
+
+.social-button.facebook {
+    background-color: var(--primary-color);
+}
+.social-button.facebook:hover {
+    background-color: #222831
+}
+.social-button.twitter {
+    background-color:#222831;
+    margin-bottom: 20px;
+}
+
+.social-button:hover {
+    background-color: var(--primary-color);
+}

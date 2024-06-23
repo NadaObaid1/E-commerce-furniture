@@ -1,0 +1,116 @@
+/* لإضافة التنسيق المطلوب للعناصر */
+.populor-products{
+    background-color: var(--subsecondary-color);
+    overflow-x: hidden;
+}
+.product-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-left: 50px;
+}
+
+.product-item {
+    width: calc(300px); /* كل عنصر يأخذ ثلث العرض مع مراعاة المسافة */
+    margin-bottom: 20px; /* مسافة بين الصفوف */
+    position: relative; /* لضبط التراكب */
+}
+
+.portfolio-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.portfolio-item img {
+    width: 300px;
+    height: 300px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.portfolio-item:hover .overlay {
+    opacity: 1;
+}
+.add-cart {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.add-cart span {
+    margin-right: 5px;
+}
+
+.info2 {
+    text-align: center;
+}
+
+.info2 h5 {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.info2 p {
+    font-size: 16px;
+    color: #666;
+}
+
+
+.graybox {
+    color: #333; /* Darker color for better readability */
+    font-weight: bold;
+    font-size: 20px; /* Slightly larger font size */
+    text-transform: capitalize;
+    text-decoration: underline;
+    margin-top: 50px; /* Reduce top margin for better spacing */
+}
+
+.Ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.Ul li {
+    padding: 10px 0; /* Increase padding for better spacing */
+}
+
+.Ul li a {
+    text-decoration: none;
+    font-size: 14px; /* Slightly larger font size */
+    color: #505b44; /* Match color with .graybox for consistency */
+    font-weight: bold;
+    text-transform: capitalize;
+    transition: color 0.3s; /* Smooth transition for hover effect */
+}
+
+.Ul li a:hover {
+    color: #ed9f66; /* Keep hover color for consistency */
+}
+.descDetails{
+    margin-left: 70px;
+    display: flex;
+    align-items: center;
+}
+.descDetails span{
+    color: var(--subsecondary-color);
+    margin-left: 10px;
+}
+.descDetails p{
+    color: var(--subsecondary-color);
+    font-weight: 500;
+    font-size: 14px;
+}
