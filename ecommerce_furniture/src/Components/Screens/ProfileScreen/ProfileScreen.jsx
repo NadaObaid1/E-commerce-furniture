@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 import './ProfileScreen.css';
-import image from '../../assests/person1.jpg';
+import image from '../../assests/nada.jpg';
 import { FaHome, FaTachometerAlt, FaProjectDiagram, FaTasks, FaChartLine, FaUsers, FaHeadset, FaCog, FaSignOutAlt, FaEdit, FaFacebook, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { AuthContext } from '../../../AuthContext.js';
 
 const ProfileScreen = () => {
   const [user, setUser] = useState({
     name: "Nada Obaid",
     location: "Palestine, Jenin",
     email: "nada.s.obaidd@gmail.com",
-    phone: "+978 065 226 25",
+    phone: "0652262599",
     social: [
       { platform: "facebook", url: "" },
       { platform: "instagram", url: "#" },
@@ -18,6 +20,38 @@ const ProfileScreen = () => {
   });
 
   const [isEditing, setIsEditing] = useState(false);
+  const { userId, token } = useContext(AuthContext);
+
+  useEffect(() => {
+    fetchUserData(); // Fetch user data when component mounts
+  }, [token]);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(
+        `https://e-commercefurniturebackend.onrender.com/profiles/profile/${userId}`,
+        {
+          headers: {
+            Authorization: `Nada__${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const { userName, email, phone, address } = response.data;
+        setUser({
+          name: userName,
+          email: email,
+          phone: phone,
+          location: address,
+        });
+      } else {
+        console.log('Failed to fetch user data');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,11 +65,41 @@ const ProfileScreen = () => {
     setIsEditing(!isEditing);
   };
 
+  const handleSaveClick = async () => {
+    try {
+      const response = await axios.put(
+        'https://e-commercefurniturebackend.onrender.com/profiles/profile/6680b2bf661b9e950bb8f7da',
+        {
+          userName: user.name,
+          email: user.email,
+          phone: user.phone,
+          address: user.location,
+        },
+        {
+          headers: {
+            Authorization: `Nada__${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log('Profile updated successfully');
+        setIsEditing(false);
+        fetchUserData(); // Fetch updated user data
+      } else {
+        console.log('Failed to update profile');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
+
   return (
     <div className="profile-page">
       <div className="sidebar">
         <nav className="sidebar-nav">
-        <h2>Your Profile</h2>
+          <h2>Your Profile</h2>
           <ul>
             <li><a href="#"><FaHome /> Home</a></li>
             <li><a href="#"><FaTachometerAlt /> Dashboard</a></li>
@@ -70,7 +134,7 @@ const ProfileScreen = () => {
           <section className="profile-info">
             <div className="info-itemName">
               {isEditing ? (
-                <input type="text" name="name" value={user.name} onChange={handleChange}style={{padding:'10px'}}/>
+                <input type="text" name="name" value={user.name} onChange={handleChange} style={{padding:'10px'}}/>
               ) : (
                 <h2>{user.name}<FaEdit className="edit-icon" onClick={handleEditClick} /></h2>
               )}
@@ -104,8 +168,8 @@ const ProfileScreen = () => {
               <div className='FaInstagram'><FaInstagram/></div>
               <div><FaLinkedin/></div>
             </div>
-            {isEditing && <button onClick={handleEditClick} className='buttoSave'>Save</button>}
-            {isEditing && <button onClick={handleEditClick} className='buttocancel'>cancel</button>}
+            {isEditing && <button onClick={handleSaveClick} className='buttonSave'>Save</button>}
+            {isEditing && <button onClick={handleEditClick} className='buttonCancel'>Cancel</button>}
           </section>
         </div>
       </div>

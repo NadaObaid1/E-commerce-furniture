@@ -52,7 +52,7 @@ background-color: #fff;
     border-radius: 5px;
   }
   
-  .ButtonSigUp {
+  .ButtonSignUp {
     background-color: var(--background-color);
     color: var(--subsecondary-color);
     border: none;
@@ -62,7 +62,7 @@ background-color: #fff;
     width: 100%;
   }
   
-  .ButtonSigUp:hover {
+  .ButtonSignUp:hover {
     background-color: var(--primary-color);
     color: var(--subsecondary-color);
   }

@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaArrowRight, FaEye, FaHeart, FaPlus } from 'react-icons/fa'; 
 import { Link } from 'react-router-dom'; 
 import './Categories.css';
 
 const Categories = () => {
   const [activeList, setActiveList] = useState(1);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetch('https://e-commercefurniturebackend.onrender.com/Catogories/')
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === "success") {
+          setCategories(data.Categories);
+        }
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
 
   const handleListChange = (direction) => {
     if (direction === 'left' && activeList > 1) {
@@ -13,61 +25,10 @@ const Categories = () => {
       setActiveList(activeList + 1);
     }
   };
-  const portfolioItems = [
-    { 
-      id: 1,
-      image: require('../../assests/Living Room.jpg'),
-      title: 'Living Room',
-      price: '$60',
-    },
-    { 
-      id: 2,
-      image: require('../../assests/Home Gym.jpg'),
-      title: 'Home Gym',
-      price: '$45',
-    },
-    { 
-      id: 3,
-      image: require('../../assests/Game and Entertainment Room.jpg'),
-      title: 'Game and Entertainment Room',
-      price: '$60',
-    },
-    { 
-      id: 4,
-      image: require('../../assests/Kitchen.jpg'),
-      title: 'Kitchen',
-      price: '$120',
-    },
-    { 
-      id: 5,
-      image: require('../../assests/Home Office.jpg'),
-      title: 'Home Office',
-      price: '$45',
-    },
-    { 
-      id: 6,
-      image: require('../../assests/Entryway and Hallway.jpg'),
-      title: 'Entryway and Hallway',
-      price: '$45',
-    },
-    { 
-      id: 7,
-      image: require('../../assests/Home Decor.jpg'),
-      title: 'Home Decor',
-      price: '$120',
-    },
-    { 
-      id: 8,
-      image: require('../../assests/Nursery.jpg'),
-      title: 'Nursery',
-      price: '$60',
-    },
-  ];
 
-  const list1 = portfolioItems.slice(0, 4);
-  const list2 = portfolioItems.slice(4);
+  const list1 = categories.slice(0, 4);
+  const list2 = categories.slice(4);
 
- 
   return (
     <section className="portfolio" id="portfolio">
       <div className="container3">
@@ -86,12 +47,12 @@ const Categories = () => {
                 <div className="col-md-2" key={index}>
                   <div className="portfolio-item position-relative">
                     <div className="overlay d-flex justify-content-center align-items-center">
-                    <Link to='ProductsScreen' className="add-cart">
-                        <span>ADD TO CART </span> 
+                    <Link to={`/ProductsScreen/${item._id}`} className="add-cart">
+                        <span>SHOW PRODUCTS </span> 
                         <span className='faPlusIcon'><FaPlus/></span>
                       </Link>
                     </div>
-                    <img src={item.image} className="w-100" alt={item.title} style={{ height: '35vh' }} />
+                    <img src={item.image.secure_url} className="w-100" alt={item.Name} style={{ height: '35vh' }} />
                     <div className="info d-flex justify-content-between align-items-center">
                       <div className="desc">
                         <p>Quicklook<span><FaEye/></span></p>
@@ -102,8 +63,8 @@ const Categories = () => {
                     </div>
                   </div>
                   <div className="info2">
-                    <h5 className="title m-0">{item.title}</h5>
-                    <p className="priceStyle">{item.price}</p>
+                    <h5 className="title m-0">{item.Name}</h5>
+                    <p className="priceStyle">$60</p> 
                   </div>
                 </div> 
               ))}

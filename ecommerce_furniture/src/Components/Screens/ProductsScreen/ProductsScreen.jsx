@@ -1,22 +1,59 @@
-import React, { useState } from 'react';
-import { FaPlus, FaEye} from 'react-icons/fa';
+import React, { useState, useEffect, useContext } from 'react';
+import { FaPlus, FaEye } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { AuthContext } from '../../../AuthContext.js';
 import './ProductsScreen.css';
 
 const ProductsScreen = () => {
   const [sort, setSort] = useState('Default Sorting');
-  const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const { token } = useContext(AuthContext);
 
-  const handleSortChange = (event) => {
-    setSort(event.target.textContent);
-  };
+  useEffect(() => {
+    fetch('https://e-commercefurniturebackend.onrender.com/products/getProducts')
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === "Success") {
+          setProducts(data.products);
+        }
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
 
   const handleAddToCart = (product) => {
-    setCart([...cart, product]);
-    toast.success(`${product.name} added to cart!`, {
-      autoClose: 2000 
+    if (!product || !product._id) {
+      console.error('Invalid product data:', product);
+      toast.error('Invalid product data. Please try again.');
+      return;
+    }
+    const data = {
+      productId: product._id,
+    };
+    axios.post('https://e-commercefurniturebackend.onrender.com/cart/', data, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Nada__${token}`,
+      },
+    })
+    .then(response => {
+      if (!response.data) {
+        throw new Error('Failed to add to cart');
+      }
+      toast.success(`${product.name} added to cart!`, {
+        autoClose: 2000,
+      });
+      setTimeout(() => {
+        navigate('/ShoppingCart');
+      }, 2000); 
+    })
+    .catch(error => {
+      console.error('Error adding to cart:', error.message);
+      toast.error('Failed to add to cart, please Login before');
     });
   };
 
@@ -35,21 +72,9 @@ const ProductsScreen = () => {
     { name: 'Length:140cm | Width:80cm', count: 5 },
   ];
 
-  const products = [
-    { id: 1, name: '3/4 SLEEVE SHIRT', price: 75, description: 'Description for 3/4 SLEEVE SHIRT', image: require('../../assests/1 (7).jpg') },
-    { id: 2, name: 'BEACH BAG', price: 60, description: 'Description for BEACH BAG', image: require('../../assests/1 (2).jpg') },
-    { id: 3, name: 'BEIGE TOP', price: 45, description: 'Description for BEIGE TOP', image: require('../../assests/10.jpg') },
-    { id: 4, name: 'FLOWING SHORTS', price: 60, description: 'Description for FLOWING SHORTS', image: require('../../assests/1 (4).jpg') },
-    { id: 5, name: 'BODYSUIT WITH LACE', price: 60, description: 'Description for BODYSUIT WITH LACE', image: require('../../assests/1 (5).jpg'), originalPrice: 120 },
-    { id: 6, name: 'LEATHER PINK DRESS', price: 240, description: 'Description for LEATHER PINK DRESS', image: require('../../assests/1 (6).jpg') },
-    { id: 7, name: 'FLOWER T-SHIRT', price: 40, description: 'Description for FLOWER T-SHIRT', image: require('../../assests/12.jpg') },
-    { id: 8, name: 'CITY BAG', price: 80, description: 'Description for CITY BAG', image: require('../../assests/13.jpg') },
-    { id: 9, name: 'CITY BAG', price: 80, description: 'Description for CITY BAG', image: require('../../assests/1 (9).jpg') }
-  ];
-
   return (
     <section className="populor-products">
-      <div className="containerr">
+      <div className="container">
         <div className="row">
           <div className="col">
             <div className="product-container pt-5">
@@ -58,7 +83,9 @@ const ProductsScreen = () => {
                 <ul className='Ul'>
                   {colors.map((color) => (
                     <li key={color.name}>
-                      <a href={`products/${color.name}`}>{color.name} </a>({color.count})
+                      <Link to={`/products/${color.name}`}>
+                        {color.name} ({color.count})
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -68,7 +95,9 @@ const ProductsScreen = () => {
                 <ul className='Ul'>
                   {sizes.map((size) => (
                     <li key={size.name}>
-                      <a href={`products/${size.name.replace(/ /g, '')}`}>{size.name} </a>({size.count})
+                      <Link to={`/products/${size.name.replace(/ /g, '')}`}>
+                        {size.name} ({size.count})
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -107,22 +136,22 @@ const ProductsScreen = () => {
                                     <span>ADD TO CART </span><FaPlus/>
                                   </div>
                                 </div>
-                                <Link to={`/products/${product.id}`}>
-                                  <img src={`${product.image}`} className="w-100" alt={product.name} />
+                                <Link to={`/products/${product._id}`}>
+                                  <img src={product.mainImage.secure_url} className="w-100" alt={product.name} />
                                   <div className="info">
-                                  <Link to={`/ProductsDetails`} style={{ textDecoration: 'none' }}>
-                                     <div className="descDetails">
+                                    <Link to={`/ProductsDetails/${product._id}`} style={{ textDecoration: 'none' }}>
+                                      <div className="descDetails">
                                         <p>Show Product Details</p>
                                         <span><FaEye/></span>
-                                     </div>
-                                   </Link>
+                                      </div>
+                                    </Link>
                                   </div>
                                 </Link>
                               </div>
                               <div className="info2">
                                 <h5 className="m-0">{product.name}</h5>
                                 <p className="m-0">
-                                  {product.originalPrice && <del>${product.originalPrice}</del>} ${product.price}
+                                  {product.discount ? <del>${product.finalPrice}</del> : null} ${product.finalPrice}
                                 </p>
                               </div>
                             </div>

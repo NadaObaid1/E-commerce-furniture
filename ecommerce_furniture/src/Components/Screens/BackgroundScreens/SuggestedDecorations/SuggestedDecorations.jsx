@@ -1,30 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './SuggestedDecorations.css';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import image1 from '../../../assests/background1.jpg';
-import image2 from '../../../assests/background2.jpg';
-import image3 from '../../../assests/background3.jpg';
-import image4 from '../../../assests/background4.jpg';
-import image5 from '../../../assests/background6.jpg';
-import image6 from '../../../assests/background5.jpg';
 
 function SuggestedDecorations() {
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+    const [decorationsData, setDecorationsData] = useState([]);
 
-    const slides = [
-        [
-            { src: image1, alt: 'Image 1' },
-            { src: image2, alt: 'Image 2' },
-            { src: image3, alt: 'Image 3' }
-        ],
-        [
-            { src: image4, alt: 'Image 1' },
-            { src: image5, alt: 'Image 2' },
-            { src: image6, alt: 'Image 3' }
-        ]
-    ];
+    useEffect(() => {
+        const fetchDecorationsData = async () => {
+            try {
+                const response = await axios.get("https://e-commercefurniturebackend.onrender.com/SuggestedDecorations/SuggestedDecorations");
+                if (response.data.message === 'success') {
+                    setDecorationsData(response.data.SuggestedDecorations);
+                } else {
+                    console.error('Failed to fetch decorations data');
+                }
+            } catch (error) {
+                console.error("Error fetching decorations data:", error);
+            }
+        };
 
-    const totalSlides = slides.length;
+        fetchDecorationsData();
+    }, []);
+
+    // Ensure decorationsData is correctly set and structured
+    console.log(decorationsData);
+
+    const totalSlides = decorationsData.length;
 
     const goToPreviousSlide = () => {
         const newIndex = (currentSlideIndex - 1 + totalSlides) % totalSlides;
@@ -40,11 +43,15 @@ function SuggestedDecorations() {
         <div>
             <h2 className="titleEmployees">Suggested Decorations</h2>
             <hr className="title-hr" />
-            <p className="DescSuggestedDecorations">Explore our suggested decorations<br/> to inspire your space with elegance and creativity.</p>
+            <p className="DescSuggestedDecorations">
+                Explore our suggested decorations
+                <br />
+                to inspire your space with elegance and creativity.
+            </p>
             <div className="grid-container">
-                {slides[currentSlideIndex].map((image, index) => (
+                {Array.isArray(decorationsData) && decorationsData.map((decoration, index) => (
                     <div key={index} className={`grid-item item${index + 1}`}>
-                        <img src={image.src} alt={image.alt} className="grid-image" />
+                        <img src={decoration.image.secure_url} alt={`Decoration ${index + 1}`} className="grid-image" />
                     </div>
                 ))}
             </div>
