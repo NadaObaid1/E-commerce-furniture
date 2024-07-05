@@ -64,7 +64,6 @@ const Categories = () => {
                   </div>
                   <div className="info2">
                     <h5 className="title m-0">{item.Name}</h5>
-                    <p className="priceStyle">$60</p> 
                   </div>
                 </div> 
               ))}

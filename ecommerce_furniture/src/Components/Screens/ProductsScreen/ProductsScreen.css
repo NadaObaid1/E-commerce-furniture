@@ -114,3 +114,14 @@
     font-weight: 500;
     font-size: 14px;
 }
+.add-favorite {
+    color: darkred;
+    padding: 13px;
+    background-color: #fff;
+    border-width: 1px;
+    border-bottom-left-radius: 50px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10; 
+}

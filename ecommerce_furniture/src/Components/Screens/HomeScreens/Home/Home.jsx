@@ -8,6 +8,7 @@ import Employees from '../../Employees/Employees.jsx';
 import Bestseller from '../../BestsellerScreen/Bestseller.jsx';
 import FAQ from '../../FAQScreen/FAQ.jsx';
 import SuggestedDecorations from '../../BackgroundScreens/SuggestedDecorations/SuggestedDecorations.jsx';
+import { Link } from "react-router-dom";
 
 const images = [
   require('../../../assests/home3.png')
@@ -28,10 +29,10 @@ export default function Home() {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac massa nec justo condimentum maximus ac ut tellus.
           </p>
           <div className="additional-content">
-            <button className='buttonStyle'>
-              <span style={{ marginRight: '5px' }}>View New Arrivals</span>
-              <FaArrowRight className='arrowright' />
-            </button>
+          <Link to="/ProductsScreen" className="buttonStyle">
+            <span style={{ marginRight: "5px" }}>View New Arrivals</span>
+          <FaArrowRight className="arrowright" />
+          </Link>
             <div className="circle-container">
               {peopleImages.map((image, index) => (
                 <div className="circle" key={index}>

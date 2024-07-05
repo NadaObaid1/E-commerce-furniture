@@ -11,10 +11,11 @@ const ShoppingCart = () => {
   const [totalCartPrice, setTotalCartPrice] = useState(0);
   const { token } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
+  const [unavailableProducts, setUnavailableProducts] = useState([]);
 
   useEffect(() => {
-    fetchCart(); // Initial fetch when component mounts
-    fetchTotalCartPrice(); // Fetch total cart price when component mounts
+    fetchCart();
+    fetchTotalCartPrice();
   }, [token]);
 
   const fetchCart = async () => {
@@ -57,15 +58,17 @@ const ShoppingCart = () => {
 
   const handleIncreaseQuantity = async (productId) => {
     try {
-      const response = await axios.put('https://e-commercefurniturebackend.onrender.com/cart/increaseQuantity', {
-        productId: productId
-      }, {
-        headers: {
-          Authorization: `Nada__${token}`,
-          'Content-Type': 'application/json'
+      const response = await axios.put(
+        'https://e-commercefurniturebackend.onrender.com/cart/increaseQuantity',
+        { productId: productId },
+        {
+          headers: {
+            Authorization: `Nada__${token}`,
+            'Content-Type': 'application/json'
+          }
         }
-      });
-      
+      );
+
       if (response.data.message === 'Success') {
         console.log('Quantity increased successfully');
         await fetchCart(); // Fetch the updated cart after successful increase
@@ -74,9 +77,14 @@ const ShoppingCart = () => {
         console.log('Failed to increase quantity:', response.data.message);
       }
     } catch (error) {
-      console.error('Error increasing quantity:', error);
+      if (error.response.status === 401) {
+        setUnavailableProducts(prevState => [...prevState, productId]);
+      } else {
+        console.error('Error increasing quantity:', error);
+      }
     }
   };
+
 
   const handleDecreaseQuantity = async (productId) => {
     try {
@@ -88,16 +96,20 @@ const ShoppingCart = () => {
           'Content-Type': 'application/json'
         }
       });
-      
+
       if (response.data.message === 'Success') {
         console.log('Quantity decreased successfully');
-        await fetchCart(); // Fetch the updated cart after successful decrease
-        await fetchTotalCartPrice(); // Fetch updated total cart price
+        await fetchCart();
+        await fetchTotalCartPrice();
       } else {
         console.log('Failed to decrease quantity:', response.data.message);
       }
     } catch (error) {
-      console.error('Error decreasing quantity:', error);
+      if (error.response.status === 401) {
+        setUnavailableProducts(prevState => [...prevState, productId]);
+      } else {
+        console.error('Error decreasing quantity:', error);
+      }
     }
   };
 
@@ -110,7 +122,7 @@ const ShoppingCart = () => {
           Authorization: `Nada__${token}`
         }
       });
-      
+
       if (response.data.message === 'Success') {
         await fetchCart(); // Fetch the updated cart after successful removal
         await fetchTotalCartPrice(); // Fetch updated total cart price
@@ -130,7 +142,7 @@ const ShoppingCart = () => {
           Authorization: `Nada__${token}`
         }
       });
-      
+
       if (response.data.message === 'Success') {
         await fetchCart(); // Fetch the updated cart after successful removal
         await fetchTotalCartPrice(); // Fetch updated total cart price
@@ -142,7 +154,7 @@ const ShoppingCart = () => {
       console.error('Error removing item from cart:', error);
     }
   };
-  
+
 
   if (loading) {
     return <div>Loading cart...</div>;
@@ -159,11 +171,16 @@ const ShoppingCart = () => {
         <div>
           {cart.products.map(item => (
             <div key={item.productId._id} className="cart-item">
+              <div style={{flexDirection: 'row'}}>
               <input
                 type="checkbox"
                 checked={item.selected || false}
               />
               <img src={item.productId.mainImage.secure_url} alt={item.productId.name} />
+              {unavailableProducts.includes(item.productId._id) && (
+                <div className="unavailable-message">is not available</div>
+              )}
+              </div>
               <span>{item.productId.name}</span>
               <div className="quantity-controls">
                 <button onClick={() => handleDecreaseQuantity(item.productId._id)} disabled={item.quantity === 0}>-</button>
@@ -172,6 +189,7 @@ const ShoppingCart = () => {
               </div>
               <span> $ {item.productId.finalPrice}</span>
               <button onClick={() => handleRemoveFromCart(item.productId._id)} className='remove'>Remove</button>
+              
             </div>
           ))}
         </div>
@@ -182,7 +200,6 @@ const ShoppingCart = () => {
           <button onClick={() => handleRemoveCart()} className='remove'>Remove Cart</button>
         </div>
       </div>
-
       <div className="payment-container">
         <h2 className="payment-header">Payment</h2>
         <div className="card-preview">

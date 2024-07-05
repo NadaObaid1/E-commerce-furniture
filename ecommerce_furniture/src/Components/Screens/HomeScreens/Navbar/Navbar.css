@@ -82,3 +82,46 @@
   font-weight: bold;
   text-decoration: none;
 }
+/* Navbar.css */
+.Modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background: #eeeeee; 
+  padding: 20px;
+  border-radius: 8px;
+  width: 700px; 
+  text-align: center; 
+}
+
+.Modal h2 {
+  margin-top: 0;
+  color: var(--background-color); 
+  font-family:'Times New Roman', Times, serif;
+}
+
+.Modal p {
+  color: var(--background-color);
+  font-family:'Times New Roman', Times, serif;
+}
+
+.Modal div {
+  margin-top: 20px;
+}
+
+.Modal a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: var(--subsecondary-color);
+  padding: 7px;
+  font-family:'Times New Roman', Times, serif;
+  background-color: var(--background-color);
+}
+
+.Modal a:hover {
+  text-decoration: underline;
+}

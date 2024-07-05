@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FaPlus, FaEye } from 'react-icons/fa';
+import { FaPlus, FaEye, FaHeart } from 'react-icons/fa'; // Import FaHeart for the heart icon
 import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -54,6 +54,33 @@ const ProductsScreen = () => {
     .catch(error => {
       console.error('Error adding to cart:', error.message);
       toast.error('Failed to add to cart, please Login before');
+    });
+  };
+
+  const handleAddToFavorites = (product) => {
+    if (!product || !product._id) {
+      console.error('Invalid product data:', product);
+      toast.error('Invalid product data. Please try again.');
+      return;
+    }
+    const data = {
+      productId: product._id,
+    };
+    axios.post('https://e-commercefurniturebackend.onrender.com/favorite/', data, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Nada__${token}`,
+      },
+    })
+    .then(response => {
+      if (!response.data || response.data.message !== 'success') {
+        throw new Error('Failed to add to favorites');
+      }
+      toast.success(`${product.name} added to favorites!`);
+    })
+    .catch(error => {
+      console.error('Error adding to favorites:', error.message);
+      toast.error('Failed to add to favorites. Please try again.');
     });
   };
 
@@ -132,6 +159,9 @@ const ProductsScreen = () => {
                             <div className="product-item" key={index}>
                               <div className="portfolio-item position-relative">
                                 <div className="overlay d-flex justify-content-center align-items-center">
+                                <div className="add-favorite" onClick={() => handleAddToFavorites(product)}>
+                                  <span><FaHeart /></span>
+                                </div>
                                   <div className="add-cart" onClick={() => handleAddToCart(product)}>
                                     <span>ADD TO CART </span><FaPlus/>
                                   </div>
@@ -151,7 +181,7 @@ const ProductsScreen = () => {
                               <div className="info2">
                                 <h5 className="m-0">{product.name}</h5>
                                 <p className="m-0">
-                                  {product.discount ? <del>${product.finalPrice}</del> : null} ${product.finalPrice}
+                                  {product.discount ? <del>${product.price}</del> : null} ${product.finalPrice}
                                 </p>
                               </div>
                             </div>
