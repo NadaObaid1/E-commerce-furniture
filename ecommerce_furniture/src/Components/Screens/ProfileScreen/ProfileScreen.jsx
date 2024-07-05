@@ -10,7 +10,7 @@ const ProfileScreen = () => {
     name: "Nada Obaid",
     location: "Palestine, Jenin",
     email: "nada.s.obaidd@gmail.com",
-    phone: "0652262599",
+    phone: "0562134789",
     social: [
       { platform: "facebook", url: "" },
       { platform: "instagram", url: "#" },

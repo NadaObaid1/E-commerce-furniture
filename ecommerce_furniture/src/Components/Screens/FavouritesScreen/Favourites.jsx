@@ -5,7 +5,7 @@ import './Favourites.css';
 
 const Favourites = () => {
   const [favorites, setFavorites] = useState([]);
-  const { token } = useContext(AuthContext); // Ensure AuthContext is imported correctly
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -35,7 +35,7 @@ const Favourites = () => {
 
   const handleBuyNow = (productId) => {
     alert(`Proceeding to buy product ${productId} now!`);
-    // Implement your buy now functionality here
+    
   };
 
   const handleRemoveFavorite = async (productId) => {
@@ -43,7 +43,7 @@ const Favourites = () => {
       try {
         const response = await axios.patch(
           `https://e-commercefurniturebackend.onrender.com/favorite/removeItem`,
-          { productId: productId }, // Include productId in the request body
+          { productId: productId }, 
           {
             headers: {
               Authorization: `Nada__${token}`,

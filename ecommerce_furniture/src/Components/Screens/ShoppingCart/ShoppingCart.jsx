@@ -161,7 +161,7 @@ const ShoppingCart = () => {
   }
 
   if (!cart || !cart.products || cart.products.length === 0) {
-    return <div>No items in the cart.</div>;
+    return <div style={{marginBottom: '130px', marginTop: '20px'}}>No items in the cart.</div>;
   }
 
   return (

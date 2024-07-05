@@ -12,7 +12,7 @@
   .cart-container {
     padding: 20px;
     max-width: 800px;
-    background-color: #f9f9f9;
+    background-color: var(--subsecondary-color);
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     flex: 2;

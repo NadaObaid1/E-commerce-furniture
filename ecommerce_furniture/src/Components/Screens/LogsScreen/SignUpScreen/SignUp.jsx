@@ -178,6 +178,7 @@ export default function SignUp() {
                         ) : null}
                     </div>
                     <button type="submit" className='ButtonSignUp'>SignUp</button>
+                    <a href='Login'><p style={{textAlign: 'end'}}>or Login?</p></a>
                 </form>
                 <div className="social-login">
                     <p>or Register using</p>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FaPlus, FaEye, FaHeart } from 'react-icons/fa'; // Import FaHeart for the heart icon
+import { FaPlus, FaEye, FaHeart } from 'react-icons/fa'; 
 import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -53,7 +53,7 @@ const ProductsScreen = () => {
     })
     .catch(error => {
       console.error('Error adding to cart:', error.message);
-      toast.error('Failed to add to cart, please Login before');
+      toast.error('Failed to add to cart');
     });
   };
 
@@ -77,6 +77,9 @@ const ProductsScreen = () => {
         throw new Error('Failed to add to favorites');
       }
       toast.success(`${product.name} added to favorites!`);
+      setTimeout(() => {
+        navigate('/Favourites');
+      }, 2000); 
     })
     .catch(error => {
       console.error('Error adding to favorites:', error.message);
